@@ -1,0 +1,76 @@
+{%extends "layout.html"%}
+
+
+{% block content %}
+
+<div class="row">
+    <div class="col-2">
+        <img class="rounded-circle account-img" src={{Designer_im_file}} width="100" height="100">
+    </div>
+    <div class="Col-4 text-left">
+        <h4>Naresh Sampara (PhD)</h4>
+        <h6>Data Analyst and web designer</h6>
+        <h6>Nottingham, UK</h6>
+    </div>
+</div>
+
+Meet Naresh Sampara, the creative genius behind the captivating world of the Home work Kids App. 
+With a deep passion for both education and technology, Naresh embarked on a mission to redefine 
+how children engage with their studies. Armed with a degree in technology and a heart full of innovation, 
+he meticulously crafted an app that combines learning and entertainment in unprecedented ways. 
+Naresh's keen understanding of child psychology led his to design intuitive interfaces and captivating visuals 
+that cater to young minds. His commitment to safety drove the app's robust parental controls, 
+ensuring a secure digital environment. Naresh's dedication to empowering the next generation of learners shines 
+through in every pixel and line of code, making Home work a testament to her vision of a brighter, 
+more engaging educational future.
+
+<br>
+<br>
+{% if success:%}
+    <p>Thank you for your message. We'll get back to you shortly.</p>
+  {% else:%}
+    {% for message in form.Name.errors: %}
+      <div class="flash">{{ message }}</div>
+    {% endfor %}
+    {% for message in form.Email.errors: %}
+      <div class="flash">{{ message }}</div>
+    {% endfor %}
+    {% for message in form.Subject.errors: %}
+      <div class="flash">{{ message }}</div>
+    {% endfor %}
+    {% for message in form.Message.errors: %}
+      <div class="flash">{{ message }}</div>
+    {% endfor %}
+  
+  <form action="{{ url_for('about') }}" method=POST>
+    
+    <fieldset class="form-group">
+        <legend class="border-bottom mb-4">Contact</legend>
+        {{form.hidden_tag()}}
+    
+    <div class="row">
+        <div class="col-2">{{ form.Name.label }}</div>
+        <div class="col-4">{{ form.Name }}</div>
+    </div><br>
+
+    <div class="row">
+        <div class="col-2">{{ form.Email.label }}</div>
+        <div class="col-4">{{ form.Email }}</div>
+    </div><br>
+    
+    <div class="row">
+        <div class="col-2">{{ form.Subject.label }}</div>
+        <div class="col-4">{{ form.Subject}}</div>
+    </div><br>
+
+    <div class="row">
+        <div class="col-2">{{ form.Message.label }}</div>
+        <div class="col-4">{{ form.Message(rows='8',cols='30')}}</div>
+    </div><br>
+    </fieldset>
+
+    
+    {{ form.CF_Submit_Button(class="btn btn-outline-info") }}
+  </form>
+{%endif%}
+{% endblock content %}

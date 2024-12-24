@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-2">
+            <img class="rounded-circle account-img" src={{image_file}} width="70" height="70">
+        </div>
+
+        <div class="col-10">
+            <h2 class="text-secondary">{{current_user.firstname.capitalize()}} {{current_user.lastname.capitalize()}}</h2>
+            <p class="text-secondary">{{current_user.username}}</p>
+            <a href="{{url_for('logout')}}"><p>Logout</p></a>
+        </div>
+    </div>
+</div>
+    <br><br>
+    <h3>
+        Welcome to the Home Work. 
+
+    </h3>
+    <br><br>
+    <p>"Home work Kids Edition" – the ultimate learning companion for young scholars! 
+        This vibrant and engaging app has been thoughtfully designed to make homework 
+        a delightful adventure for kids. With its user-friendly interface and interactive features, 
+        HomeworkHelper Kids Edition provides the practice session of Arthimetics, reasoning and spelling 
+        It also offers a personalized dashboard, allowing kids to moniotr their progress. 
+        With built-in rewards and badges, completing assignments becomes a source of accomplishment and fun. 
+        Parents can rest assured knowing that HomeworkHelper prioritizes online safety and offers progress tracking, 
+        ensuring a well-rounded learning experience. Turn homework time into a captivating journey with Home work 
+        Kids Edition – where learning and play seamlessly come together! 
+    </p>
+
+    
+    <p>
+        In this practice exercises including , each one exercise the student need to answer the 20 questions of the chosen topic. 
+        The results will be stored. If you are first time user, please follow the below instructions.   
+    </p>
+
+    <ul>
+        <li>Register</li>
+        <li>login</li>
+        <li>Select the level</li>
+        <li>Select the topic</li>
+        <li>Solve the Questions</li>
+    </ul>
+
+    <p>
+        Once the questions are solved, the results will be saved. You can track down the student progress in the dashboard. 
+    </p>
+
+{% endblock content %}
+
+
+
+
+
