@@ -1,0 +1,90 @@
+{% extends "layout.html" %}
+
+
+{% block content %}
+
+<div class="form-group">
+    <div class="content-section">
+        <form method="POST" action="">
+            {{form.hidden_tag()}}
+            <fieldset class="form-group">
+                <div class="row">
+                    <h5>Complete the Words with a Common Letter</h5>
+                    <br>
+                    <p>
+                        In this type of question, you need to find one letter that fits into both sets of brackets. The letter should finish the word before the brackets and start the word after the brackets. Find the correct letter. </p>
+                    <br><br>
+                    <p><b>Example Question:</b> 
+                    <br><br>
+                    &emsp; &emsp; &emsp; mea <b>[?]</b> able &emsp; &emsp; si <b>[?]</b> op
+                    <br> <br>                   
+                    &emsp; &emsp; &emsp; (A) p &emsp; (B) n &emsp; (C) f &emsp; (D) t &emsp; (E) c
+                    </p>
+                    <br>
+                    <p>Answer is <b>(D) t</b>. The same letter that fits into both sets of brackets to form four complete words is <strong>‘t’</strong>. The four new words are: mea<b>t</b> - <b>t</b>able, si<b>t</b> - <b>t</b>op.
+                    </p>
+                </div> 
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-group">
+                            {{form.submit_button_1(class="btn btn-outline-info")}}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <h5>Identify the Next Number in the Series</h5>
+                    <br>
+                    <p>In these questions, you need to find the number that comes next in the pattern. Look carefully at the numbers to figure out the rule or pattern they follow. The rule might involve adding, subtracting, multiplying, or dividing numbers. Sometimes, there could be two patterns: one for the numbers in the odd spots (1st, 3rd, 5th) and another for the numbers in the even spots (2nd, 4th, 6th). </p>
+                    <br><br>
+                    <p><b>Example Question:</b> 
+                        <br><br>
+                        &emsp; &emsp; &emsp; 2, &emsp; 4, &emsp; 6, &emsp; 8, &emsp; <b>[?]</b>
+                        <br><br>                    
+                        &emsp; &emsp; &emsp; (A) 16 &emsp; (B) 11 &emsp; (C) 10 &emsp; (D) 9 &emsp; (E) 12
+                        </p>
+                        <br>
+                        <p>Answer is <b>(C) 10</b>. In this series, you add <b>2</b> to each number to get the next one. Therefore, the missing number is <b>10</b>. For other sequences, different operations or patterns might apply.
+                        </p>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-group">
+                            {{form.submit_button_2(class="btn btn-outline-info")}}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <h5>Determine the Next Letter Pair in the Sequence</h5>
+                    <br>
+                    <p>In these questions, use the alphabet to find patterns in the letter sequences. Look carefully at the series to figure out the next pair of letters. The pattern might involve alphabetical order, going backwards, repeating letters, or other rules. </p>
+                    <br><br>
+                    <p>
+                        <b>Example Question:</b> 
+                        <br><br>
+                        &emsp; &emsp; &emsp; CQ, &emsp; DQ, &emsp; EP, &emsp; FP, &emsp; <b>[?]</b>
+                        <br><br>                    
+                        &emsp; &emsp; &emsp; (A) GP &emsp; (B) GO &emsp; (C) HO &emsp; (D) GR &emsp; (E) GQ
+                    </p>
+                    <br>
+                    <p>Answer is <b>(B) GO</b>. The letters are paired with a specific pattern</p>
+                        
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-group">
+                            {{form.submit_button_3(class="btn btn-outline-info")}}
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+
+
+
+    
+
+{% endblock content %}

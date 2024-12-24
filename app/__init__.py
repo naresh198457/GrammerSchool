@@ -10,6 +10,7 @@ app.config.from_pyfile("config.cfg")
 
 #Creating database
 db = SQLAlchemy(app)
+#db.init_app(app)
 bcrypt=Bcrypt(app)
 
 # login manager

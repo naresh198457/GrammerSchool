@@ -5,9 +5,10 @@ from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
 from app.models import db
 from app.models import User, dailyActivity
-from app.forms import RegistrationForm, LoginForm, contactForm
+from app.forms import RegistrationForm, LoginForm, contactForm, practiceform
 from flask_bcrypt import Bcrypt, generate_password_hash, check_password_hash
 from flask_login import login_user, current_user, logout_user, login_required
+
 
 
 mail=Mail(app)
@@ -111,3 +112,36 @@ def about():
     elif request.method == 'GET':
         
         return render_template('about.html',Designer_im_file=Designer_im_file,form=form)
+    
+
+# Practice route
+@app.route("/practice", methods = ['GET', 'POST'])
+def practice():
+    form = practiceform()
+
+    if form.validate_on_submit():
+        if form.submit_button_1:
+            return redirect(url_for('commonletter'))
+        
+        elif form.submit_button_2:
+            return redirect(url_for('identifynextnumber'))
+        
+        elif form.submit_button_3:
+            return redirect(url_for('nextletterpair'))
+
+    return render_template('practice.html', form=form)
+
+
+@app.route("/commonletter", methods = ['GET', 'POST'])
+def commonletter():
+    return render_template('commonletter.html')
+
+
+@app.route("/identifynextnumber", methods = ['GET', 'POST'])
+def identifynextnumber():
+    return render_template('identifynextnumber.html')
+
+@app.route("/nextletterpair", methods = ['GET', 'POST'])
+def nextletterpair():
+    return render_template('nextletterpair.html')
+

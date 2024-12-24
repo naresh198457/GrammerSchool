@@ -39,3 +39,12 @@ class contactForm(FlaskForm):
     Subject=StringField('Subject',validators = [DataRequired(message = "Please enter a subject.")])
     Message=TextAreaField('Message',validators=[DataRequired(message = "Please enter a message.")])
     CF_Submit_Button=SubmitField('Send')
+
+
+class practiceform(FlaskForm):
+    Desc1_text = StringField('Description of Common letter', render_kw={'readonly':True})
+    submit_button_1 = SubmitField('Common Letter')
+    Desc2_text = StringField('Description of Identify Next Number', render_kw={'readonly':True})
+    submit_button_2 = SubmitField('Identify Next Number')
+    Desc3_text = StringField('Description of Next Letter Pair', render_kw={'readonly':True})
+    submit_button_3 = SubmitField('Next Letter Pair')

@@ -23,7 +23,7 @@ class User(db.Model,UserMixin):
 class dailyActivity(db.Model):
     id=db.Column(db.Integer,primary_key=True)
     username=db.Column(db.String(40),db.ForeignKey('user.username'),nullable=False)
-    #date_test=db.Column(db.datetime,nullable=False, default=datetime.utcnow())
+    #date=db.Column(db.datetime,nullable=False, default=datetime.date)
     testType=db.Column(db.String(20),nullable=False)
     noQuestion=db.Column(db.Integer, nullable=False)
     correctAns=db.Column(db.Integer, nullable=False)
