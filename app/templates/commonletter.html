@@ -2,7 +2,21 @@
 
 
 {% block content %}
-common letter under construction
+
+<h1>Quiz</h1>
+    <form method="post">
+        <p>{{ question1 }} &emsp; &emsp;{{ question2 }}</p>
+        {{ form.hidden_tag() }}
+        <div class="options">
+            {% for option in form.options %}
+                <div class="option">
+                    {{ option }}
+                    <label>{{ option.label.text }}</label>
+                </div>
+            {% endfor %}
+        </div>
+        {{ form.submit() }}
+    </form>
 
 {% endblock content %}
 

@@ -2,7 +2,8 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField, RadioField,TextAreaField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, InputRequired
 from app.models import User
-from pandas import read_csv
+import pandas as pd
+from app.functions import same_letter_must_fit_into_both
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username',
@@ -48,3 +49,29 @@ class practiceform(FlaskForm):
     submit_button_2 = SubmitField('Identify Next Number')
     Desc3_text = StringField('Description of Next Letter Pair', render_kw={'readonly':True})
     submit_button_3 = SubmitField('Next Letter Pair')
+
+
+# # FlaskForm for Questions
+# df = same_letter_must_fit_into_both(7)
+# class commonletterform(FlaskForm):
+    
+#     questions = []
+#     for index, row in df.iterrows():
+#         field = RadioField(
+#             #row["Question"],
+#             'label',
+#             choices=[
+#                 ("option_a", row["option_a"]),
+#                 ("option_b", row["option_b"]),
+#                 ("option_c", row["option_c"]),
+#                 ("option_d", row["option_d"]),
+#                 ("option_e", row["option_e"]),
+#             ],
+#             default=None
+#         )
+#         questions.append(field)
+#     submit = SubmitField('Submit')
+
+class commonletterquestionform(FlaskForm):
+    options = RadioField('Options', choices=[], validators=[DataRequired()])
+    submit = SubmitField('Next')

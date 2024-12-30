@@ -1,15 +1,14 @@
 from app import app
-from flask import render_template, request, url_for, flash, redirect
+from flask import render_template, request, url_for, flash, redirect, session
 import os
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
 from app.models import db
 from app.models import User, dailyActivity
-from app.forms import RegistrationForm, LoginForm, contactForm, practiceform
+from app.forms import RegistrationForm, LoginForm, contactForm, practiceform, commonletterquestionform
+from app.functions import same_letter_must_fit_into_both, find_next_pair_letters
 from flask_bcrypt import Bcrypt, generate_password_hash, check_password_hash
 from flask_login import login_user, current_user, logout_user, login_required
-
-
 
 mail=Mail(app)
 s=URLSafeTimedSerializer('Thisissecret!')
@@ -93,6 +92,7 @@ def logout():
 # about route
 @app.route("/about",methods=['GET','POST'])
 def about():
+
     form=contactForm()
     Designer_im_file=url_for('static',filename='Desiner_Pics/Naresh_BW.jpg')
     if request.method == 'POST':
@@ -117,24 +117,105 @@ def about():
 # Practice route
 @app.route("/practice", methods = ['GET', 'POST'])
 def practice():
+    
+    global cl_q_no, cl_a_no, df
+    global CL_questions_1, CL_questions_2, CL_Answers, CL_urAnswers
+
+    # common letter variables 
+    df = same_letter_must_fit_into_both(7)
+    cl_q_no = cl_a_no = 0
+    CL_questions_1 = []
+    CL_questions_2 = []
+    CL_Answers = []
+    CL_urAnswers = []
+
     form = practiceform()
 
-    if form.validate_on_submit():
-        if form.submit_button_1:
+
+    if request.method == 'POST':
+        if 'submit_button_1' in request.form:
+            print('Common letter page is pressed.')
             return redirect(url_for('commonletter'))
-        
-        elif form.submit_button_2:
+        elif 'submit_button_2' in request.form:
+            print('identify the next number is pressed.')
             return redirect(url_for('identifynextnumber'))
         
-        elif form.submit_button_3:
+        elif 'submit_button_3' in request.form:
+            print('Next letter pair')
             return redirect(url_for('nextletterpair'))
 
     return render_template('practice.html', form=form)
 
 
-@app.route("/commonletter", methods = ['GET', 'POST'])
+@app.route("/commonletter", methods=['GET', 'POST'])
 def commonletter():
-    return render_template('commonletter.html')
+
+    global cl_q_no, cl_a_no, df
+    global CL_questions_1, CL_questions_2, CL_Answers, CL_urAnswers  
+
+    print(f"Current question index: {cl_q_no}")
+
+    if cl_q_no >= len(df):
+        #cl_q_no = 0
+        print("All questions completed, redirecting to dashboard.")
+        print(CL_questions_1)
+        print(CL_Answers)
+        print(CL_urAnswers)
+        Activity=dailyActivity(username=current_user.username,
+                               testType='Arithmetic',
+                               noQuestion=cl_q_no,
+                               correctAns=cl_a_no)
+                
+        db.session.add(Activity)
+        db.session.commit()
+        return redirect(url_for('commonletterdashboard'))
+
+    question_data = df.iloc[cl_q_no]
+    answer = question_data['answer']
+    print(question_data['question_1'], question_data['question_2'])
+    print('Answer: ', question_data['answer'])
+    form = commonletterquestionform()
+    form.options.choices = [(option, option) for option in question_data['options']]
+
+    if form.submit.data:
+        print('next is pressed')
+        selected_option = form.options.data
+        print(f"User selected: {selected_option}, Correct answer: {question_data['answer']}")
+        CL_questions_1.append(question_data['question_1'])
+        CL_questions_2.append(question_data['question_2'])
+        CL_Answers.append(question_data['answer']) 
+        CL_urAnswers.append(selected_option)         
+
+        if selected_option == answer:
+            cl_a_no += 1
+        cl_q_no += 1
+        print(f"Updated score: {cl_a_no}, Next question: {cl_q_no}")
+        return redirect(url_for('commonletter'))
+
+    return render_template(
+        'commonletter.html',
+        question1=question_data['question_1'],
+        question2=question_data['question_2'],
+        form=form
+    )
+
+
+@app.route("/commonletterdashboard")
+def commonletterdashboard():
+    global CL_questions_1, CL_questions_2, CL_Answers, CL_urAnswers  
+    global cl_q_no, cl_a_no
+
+    cl_answers = [CL_questions_1[i].replace(' [?] ', CL_Answers[i]+', '+CL_Answers[i])+', '+ CL_questions_2[i].replace(' [?] ', CL_Answers[i]+', '+CL_Answers[i]) for i in range(cl_q_no)]
+    cl_uranswers = [CL_questions_1[i].replace(' [?] ', CL_urAnswers[i]+', '+CL_urAnswers[i])+', '+ CL_questions_2[i].replace(' [?] ', CL_urAnswers[i]+', '+CL_urAnswers[i]) for i in range(cl_q_no)]
+    return render_template('commonletterdashboard.html', 
+                           CL_questions_1=CL_questions_1, 
+                           CL_questions_2=CL_questions_2, 
+                           CL_Answers=CL_Answers, 
+                           CL_urAnswers=CL_urAnswers,
+                           cl_answers=cl_answers,
+                           cl_uranswers=cl_uranswers,
+                           cl_q_no=cl_q_no, 
+                           cl_a_no=cl_a_no)
 
 
 @app.route("/identifynextnumber", methods = ['GET', 'POST'])

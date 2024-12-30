@@ -1,0 +1,96 @@
+{% extends "layout.html" %}
+
+
+{% block content %}
+
+<p><h5>Weldone, {{current_user.firstname.capitalize()}} have answered {{cl_q_no}} questions and {{cl_a_no}} are correct.</h5></p>
+
+<table class="table table-striped" border="1">
+    <thead><tr><th>Test</th><th>No of questions</th><th>Correct Answers</th><th>Comment</th></tr></thead>
+    <tbody>
+        <tr>
+            <td>Common Letters</td>
+            <td>{{cl_q_no}}</td>
+            <td>{{cl_a_no}}</td>
+            <td>
+                {% if cl_a_no/cl_q_no*100>90 or cl_a_no/cl_q_no*100==90:%}
+                <h5 style="color:darkgreen">Congratulations...  </h5>
+                {% elif cl_a_no/cl_q_no*100>80 or cl_a_no/cl_q_no*100==80%}
+                <h5 style="color:rgb(20, 137, 166)">Welldone...  </h5>
+                {% elif cl_a_no/cl_q_no*100>70 or cl_a_no/cl_q_no*100==70%}
+                <h5 style="color:rgb(224, 41, 231)">Above Average...  </h5> 
+                {% elif cl_a_no/cl_q_no*100>60 or cl_a_no/cl_q_no*100==60%}
+                <h5 style="color:rgb(241, 174, 19)">Average...  </h5> 
+                {% elif cl_a_no/cl_q_no*100>50 or cl_a_no/cl_q_no*100==50%}
+                <h5 style="color:rgb(89, 5, 51)"> Below Average...  </h5>  
+                {%else%}
+                <h5 style="color:rgb(89, 5, 51)">Need to work hard...  </h5>
+                {%endif%}
+            </td>
+        </tr>
+        
+        
+    </tbody>
+</table>
+
+{% if cl_a_no/cl_q_no*100>90 or cl_a_no/cl_q_no*100==90:%}
+    <h3 style="color:darkgreen">Congratulations...  </h3> {{current_user.firstname.capitalize()}} scored {{cl_a_no/cl_q_no*100}}%.
+    {% elif cl_a_no/cl_q_no*100>80 or cl_a_no/cl_q_no*100==80%}
+    <h3 style="color:rgb(20, 137, 166)">Welldone...  </h3> {{current_user.firstname.capitalize()}} scored {{cl_a_no/cl_q_no*100}}%. Always there is room for improvement. 
+    {% elif cl_a_no/cl_q_no*100>70 or cl_a_no/cl_q_no*100==70%}
+    <h3 style="color:rgb(224, 41, 231)">Above Average...  </h3> {{current_user.firstname.capitalize()}} scored {{cl_a_no/cl_q_no*100}}%. Always there is room for improvement. 
+    {% elif cl_a_no/cl_q_no*100>60 or cl_a_no/cl_q_no*100==60%}
+    <h3 style="color:rgb(241, 174, 19)">Average...  </h3> {{current_user.firstname.capitalize()}} scored {{cl_a_no/cl_q_no*100}}%. Always there is room for improvement. 
+    {% elif cl_a_no/cl_q_no*100>50 or cl_a_no/cl_q_no*100==50%}
+    <h3 style="color:rgb(89, 5, 51)"> Below Average...  </h3> {{current_user.firstname.capitalize()}} scored {{cl_a_no/cl_q_no*100}}%. Always there is room for improvement. 
+    
+    {%else%}
+    <h3 style="color:rgb(89, 5, 51)">Need to work hard...  </h3> {{current_user.firstname.capitalize()}} scored {{cl_a_no/cl_q_no*100}}%. Always there is room for improvement. 
+    {%endif%}
+
+    <br>
+    <br>
+    <br>
+    <table class="table table-striped" border="1">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Question</th>
+                <th>Answer</th>
+                <th>Your response</th>
+                <th>Comment</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%for i in range((cl_q_no))%}
+            <tr>
+                <td>{{i+1}}</td>
+                <td>{{CL_questions_1[i]}}&emsp; &emsp;{{CL_questions_2[i]}}</td>
+                <td>{{cl_answers[i]}}</td>
+                <td>
+                    {% if CL_Answers[i]==CL_urAnswers[i]: %}
+                    <span style="color:black">{{cl_uranswers[i]}}</span>
+                    {% else %}
+                    <span style="color:red">{{cl_uranswers[i]}}</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if CL_Answers[i]==CL_urAnswers[i]: %}
+                    <span style="color:darkgreen">Correct</span>
+                    {% else %}
+                    <span style="color:red">Wrong</span>
+                    {% endif %}
+                </td>
+                    
+            </tr>
+            {%endfor%}
+
+        </tbody>
+    </table>
+
+{% endblock content %}
+
+
+
+
+

@@ -98,19 +98,19 @@ def find_next_pair_letters(No_questions):
             
     return Combos_set, options_set
 
-leters_set, option_set = find_next_pair_letters(10)
-# print(leters_set)
-# print(option_set)
 
 # ----------------------------------------------------------------------
 def same_letter_must_fit_into_both(noofquestions):
+
+    df = pd.DataFrame(columns=['question', 'answer', 'options'])
 
     df_start = pd.read_csv('G:\My Drive\Mishitha\GrammerSchool\datafiles\words_start.csv')
     df_end = pd.read_csv('G:\My Drive\Mishitha\GrammerSchool\datafiles\words_end.csv')
 
     letter_list=df_end['letter'].unique().tolist()
 
-    word_question = []
+    word_question1 = []
+    word_question2 = []
     word_letters = []
 
     letters = random.sample(letter_list,noofquestions)
@@ -126,23 +126,30 @@ def same_letter_must_fit_into_both(noofquestions):
         word2 = df_st_list[0][1:]
         word3 = df_en_list[1][:-1]
         word4 = df_st_list[1][1:]
-        word_question.append(word1+' [?] '+word2 + '        ' + word3+' [?] '+word4)
+        word_question1.append(word1+' [?] '+word2)
+        word_question2.append(word3+' [?] '+word4)
         word_letters.append(l)
 
-    return word_question, word_letters
+    df['question_1'] = word_question1
+    df['question_2'] = word_question2
+    df['answer'] = word_letters
+    df['options'] = None
+    df = df.astype({'options': 'object'})
 
-words_set, letters_set = same_letter_must_fit_into_both(8)
+    common = ['e', 't', 'a', 'o', 'i', 'n', 's', 'r', 'h', 'l', 'd', 'c', 'm', 'f', 'k', 'b']
+    for i in range(len(word_letters)):
+        if word_letters[i] not in common:
+            option_list = random.sample(common, 4)
+        else: 
+            updated_common = [x for x in common if x != word_letters[i]]
+            option_list = random.sample(updated_common, 4)
+            # option_list = random.sample(common.remove(letters_set[i]),4)
+        option_list.append(word_letters[i])
+        random.shuffle(option_list)
+        df.at[i,'options']=option_list
+        # df.loc[i,'option_b']=option_list[1]
+        # df.loc[i,'option_c']=option_list[2]
+        # df.loc[i,'option_d']=option_list[3]
+        # df.loc[i,'option_e']=option_list[4]
 
-common = ['e', 't', 'a', 'o', 'i', 'n', 's', 'r', 'h', 'l', 'd', 'c', 'm', 'f', 'k', 'b']
-for i in range(7):
-    print(f"Question: {words_set[i]} \n{letters_set[i]}")
-    if letters_set[i] not in common:
-        option_list = random.sample(common, 4)
-    else: 
-        updated_common = [x for x in common if x != letters_set[i]]
-        option_list = random.sample(updated_common, 4)
-        # option_list = random.sample(common.remove(letters_set[i]),4)
-    print(option_list)
-    option_list.append(letters_set[i])
-    random.shuffle(option_list)
-    print(option_list)
+    return df
