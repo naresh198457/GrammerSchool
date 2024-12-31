@@ -1,0 +1,95 @@
+{% extends "layout.html" %}
+
+
+{% block content %}
+
+<p><h5>Weldone, {{current_user.firstname.capitalize()}} have answered {{fnpl_q_no}} questions and {{fnpl_a_no}} are correct.</h5></p>
+
+<table class="table table-striped" border="1">
+    <thead><tr><th>Test</th><th>No of questions</th><th>Correct Answers</th><th>Comment</th></tr></thead>
+    <tbody>
+        <tr>
+            <td>next letter pair</td>
+            <td>{{fnpl_q_no}}</td>
+            <td>{{fnpl_a_no}}</td>
+            <td>
+                {% if fnpl_a_no/fnpl_q_no*100>90 or fnpl_a_no/fnpl_q_no*100==90:%}
+                <h5 style="color:darkgreen">Congratulations...  </h5>
+                {% elif fnpl_a_no/fnpl_q_no*100>80 or fnpl_a_no/fnpl_q_no*100==80%}
+                <h5 style="color:rgb(20, 137, 166)">Welldone...  </h5>
+                {% elif fnpl_a_no/fnpl_q_no*100>70 or fnpl_a_no/fnpl_q_no*100==70%}
+                <h5 style="color:rgb(224, 41, 231)">Above Average...  </h5> 
+                {% elif fnpl_a_no/fnpl_q_no*100>60 or fnpl_a_no/fnpl_q_no*100==60%}
+                <h5 style="color:rgb(241, 174, 19)">Average...  </h5> 
+                {% elif fnpl_a_no/fnpl_q_no*100>50 or fnpl_a_no/fnpl_q_no*100==50%}
+                <h5 style="color:rgb(89, 5, 51)"> Below Average...  </h5>  
+                {%else%}
+                <h5 style="color:rgb(89, 5, 51)">Need to work hard...  </h5>
+                {%endif%}
+            </td>
+        </tr>
+        
+        
+    </tbody>
+</table>
+
+{% if fnpl_a_no/fnpl_q_no*100>90 or fnpl_a_no/fnpl_q_no*100==90:%}
+    <h3 style="color:darkgreen">Congratulations...  </h3> {{current_user.firstname.capitalize()}} scored {{fnpl_a_no/fnpl_q_no*100}}%.
+    {% elif fnpl_a_no/fnpl_q_no*100>80 or fnpl_a_no/fnpl_q_no*100==80%}
+    <h3 style="color:rgb(20, 137, 166)">Welldone...  </h3> {{current_user.firstname.capitalize()}} scored {{fnpl_a_no/fnpl_q_no*100}}%. Always there is room for improvement. 
+    {% elif fnpl_a_no/fnpl_q_no*100>70 or fnpl_a_no/fnpl_q_no*100==70%}
+    <h3 style="color:rgb(224, 41, 231)">Above Average...  </h3> {{current_user.firstname.capitalize()}} scored {{fnpl_a_no/fnpl_q_no*100}}%. Always there is room for improvement. 
+    {% elif fnpl_a_no/fnpl_q_no*100>60 or fnpl_a_no/fnpl_q_no*100==60%}
+    <h3 style="color:rgb(241, 174, 19)">Average...  </h3> {{current_user.firstname.capitalize()}} scored {{fnpl_a_no/fnpl_q_no*100}}%. Always there is room for improvement. 
+    {% elif fnpl_a_no/fnpl_q_no*100>50 or fnpl_a_no/fnpl_q_no*100==50%}
+    <h3 style="color:rgb(89, 5, 51)"> Below Average...  </h3> {{current_user.firstname.capitalize()}} scored {{fnpl_a_no/fnpl_q_no*100}}%. Always there is room for improvement. 
+    
+    {%else%}
+    <h3 style="color:rgb(89, 5, 51)">Need to work hard...  </h3> {{current_user.firstname.capitalize()}} scored {{fnpl_a_no/fnpl_q_no*100}}%. Always there is room for improvement. 
+    {%endif%}
+
+    <br>
+    <br>
+    <br>
+    <table class="table table-striped" border="1">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Question</th>
+                <th>Answer</th>
+                <th>Your response</th>
+                <th>Comment</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%for i in range((fnpl_q_no))%}
+            <tr>
+                <td>{{i+1}}</td>
+                <td>{{FNPL_letters_1[i]}}&emsp;{{FNPL_letters_2[i]}}&emsp;{{FNPL_letters_2[i]}}&emsp;{{FNPL_letters_2[i]}}&emsp; <strong>??</strong></td>
+                <td>{{FNPL_Answers[i]}}</td>
+                <td>
+                    {% if FNPL_Answers[i]==FNPL_urAnswers[i]: %}
+                    <span style="color:black">{{FNPL_urAnswers[i]}}</span>
+                    {% else %}
+                    <span style="color:red">{{FNPL_urAnswers[i]}}</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if FNPL_Answers[i]==FNPL_urAnswers[i]: %}
+                    <span style="color:darkgreen">Correct</span>
+                    {% else %}
+                    <span style="color:red">Wrong</span>
+                    {% endif %}
+                </td>
+                    
+            </tr>
+            {%endfor%}
+
+        </tbody>
+    </table>
+{% endblock content %}
+
+
+
+
+

@@ -2,6 +2,10 @@ import pandas as pd
 import numpy as np
 import string
 import random
+from datetime import datetime, timedelta
+from matplotlib import pyplot as plt
+from io import BytesIO
+import base64
 
 
 def find_next_pair_letters(No_questions):
@@ -10,6 +14,9 @@ def find_next_pair_letters(No_questions):
 
     Combos_set = []
     options_set =[]
+    df = pd.DataFrame(columns=['letter1', 'letter2', 'letter3', 'letter4', 'answer', 'options'])
+    df['options'] = None
+    df = df.astype({'options': 'object'})
 
     # linear increament
     for i in range(round(No_questions*0.7)):
@@ -50,10 +57,12 @@ def find_next_pair_letters(No_questions):
             no23=no21+10
 
         #print(no22, no23, no21)
-        options_set.append([letters[no11]+letters[no21],
-                            letters[no11]+letters[no22],
-                            letters[no12]+letters[no22],
-                            letters[no13]+letters[no23]])
+        options = [letters[no11]+letters[no21],
+                   letters[no11]+letters[no22],
+                   letters[no12]+letters[no22],
+                   letters[no13]+letters[no23]]
+        random.shuffle(options)
+        options_set.append(options)
 
     # non linear increament
     NonLin = [5,4,3,2,1]
@@ -89,14 +98,24 @@ def find_next_pair_letters(No_questions):
         if no23<25: 
             no23=no21+10
 
-        options_set.append([letters[no11]+letters[no21],
-                            letters[no11]+letters[no22],
-                            letters[no12]+letters[no22],
-                            letters[no13]+letters[no23]])
+        options = [letters[no11]+letters[no21],
+                   letters[no11]+letters[no22],
+                   letters[no12]+letters[no22],
+                   letters[no13]+letters[no23]]
+        random.shuffle(options)
+        options_set.append(options)
 
         Combos_set.append(comb_set)
+
+    for i in range(No_questions):
+        df.loc[i,'letter1'] = Combos_set[i][0]
+        df.loc[i,'letter2'] = Combos_set[i][1]
+        df.loc[i,'letter3'] = Combos_set[i][2]
+        df.loc[i,'letter4'] = Combos_set[i][3]
+        df.loc[i,'answer'] = Combos_set[i][4]
+        df.at[i,'options'] = options_set[i]#random.shuffle(options_set[i])
             
-    return Combos_set, options_set
+    return df
 
 
 # ----------------------------------------------------------------------
@@ -153,3 +172,49 @@ def same_letter_must_fit_into_both(noofquestions):
         # df.loc[i,'option_e']=option_list[4]
 
     return df
+
+# ---------------------------------------------------------------------------------------
+def create_bar_chart(filtered_df):
+    # Filter last 30 days
+    start_date = datetime.now() - timedelta(days=30)
+    last_30_days = filtered_df[filtered_df["date_test"] >= start_date]
+
+    # Count test types per day
+    bar_data = last_30_days.groupby([last_30_days["date_test"].dt.date, "testType"]).size().unstack(fill_value=0)
+
+    # Plot bar chart
+    plt.figure(figsize=(10, 6))
+    bar_data.plot(kind="bar", stacked=True, ax=plt.gca())
+    plt.title("Test Types Used Per Day (Last 30 Days)")
+    plt.xlabel("Date")
+    plt.ylabel("Count")
+    plt.tight_layout()
+
+    # Save to buffer
+    buffer = BytesIO()
+    plt.savefig(buffer, format="png")
+    buffer.seek(0)
+    return base64.b64encode(buffer.getvalue()).decode("utf-8")
+
+
+def create_pie_chart(filtered_df):
+    # Calculate total correct answers
+    correct_answers = filtered_df["correctAns"].sum()
+    incorrect_answers = (filtered_df["noQuestion"] - filtered_df["correctAns"]).sum()
+
+    # Data for pie chart
+    pie_data = [correct_answers, incorrect_answers]
+    labels = ["Correct Answers", "Incorrect Answers"]
+    colors = ["#4CAF50", "#F44336"]
+
+    # Plot pie chart
+    plt.figure(figsize=(6, 6))
+    plt.pie(pie_data, labels=labels, autopct="%1.1f%%", colors=colors, startangle=90)
+    plt.title("Percentage of Correct Answers")
+    plt.tight_layout()
+
+    # Save to buffer
+    buffer = BytesIO()
+    plt.savefig(buffer, format="png")
+    buffer.seek(0)
+    return base64.b64encode(buffer.getvalue()).decode("utf-8")

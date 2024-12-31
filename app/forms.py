@@ -75,3 +75,7 @@ class practiceform(FlaskForm):
 class commonletterquestionform(FlaskForm):
     options = RadioField('Options', choices=[], validators=[DataRequired()])
     submit = SubmitField('Next')
+
+class findnextletterpairform(FlaskForm):
+    options = RadioField('Options', choices=[], validators=[DataRequired()])
+    submit = SubmitField('Next')

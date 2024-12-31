@@ -2,7 +2,22 @@
 
 
 {% block content %}
-next letter pair under construction
+<h1>Quiz</h1>
+<br><br>
+<p>A&ensp;&ensp;B&ensp;&ensp;C&ensp;&ensp;D&ensp;&ensp;E&ensp;&ensp;F&ensp;&ensp;G&ensp;&ensp;H&ensp;&ensp;I&ensp;&ensp;J&ensp;&ensp;K&ensp;&ensp;L&ensp;&ensp;M&ensp;&ensp;N&ensp;&ensp;O&ensp;&ensp;P&ensp;&ensp;Q&ensp;&ensp;R&ensp;&ensp;S&ensp;&ensp;T&ensp;&ensp;U&ensp;&ensp;V&ensp;&ensp;W&ensp;&ensp;X&ensp;&ensp;Y&ensp;&ensp;Z</p><br><br>
+    <form method="post">
+        <p>{{ letter1 }} &emsp; {{ letter2 }} &emsp; {{ letter3}} &emsp; {{ letter4 }} &emsp; <strong>??</strong></p>
+        {{ form.hidden_tag() }}
+        <div class="options">
+            {% for option in form.options %}
+                <div class="option">
+                    {{ option }}
+                    <label>{{ option.label.text }}</label>
+                </div>
+            {% endfor %}
+        </div>
+        {{ form.submit() }}
+    </form>
 
 {% endblock content %}
 

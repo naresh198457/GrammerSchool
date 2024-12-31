@@ -5,10 +5,12 @@ from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
 from app.models import db
 from app.models import User, dailyActivity
-from app.forms import RegistrationForm, LoginForm, contactForm, practiceform, commonletterquestionform
-from app.functions import same_letter_must_fit_into_both, find_next_pair_letters
+from app.forms import RegistrationForm, LoginForm, contactForm, practiceform, commonletterquestionform, findnextletterpairform
+from app.functions import same_letter_must_fit_into_both, find_next_pair_letters, create_bar_chart, create_pie_chart
 from flask_bcrypt import Bcrypt, generate_password_hash, check_password_hash
 from flask_login import login_user, current_user, logout_user, login_required
+import pandas as pd
+from datetime import datetime, timedelta
 
 mail=Mail(app)
 s=URLSafeTimedSerializer('Thisissecret!')
@@ -79,9 +81,35 @@ def home():
 def account():
     image_file=url_for('static',filename='profile_pics/'+current_user.image_file)
 
-    # get the data from the DB
+    user_activities = dailyActivity.query.filter_by(username=current_user.username).all()
+    data = [{
+        "id": activity.id,
+        "username": activity.username,
+        "date_test":activity.date_test,
+        "testType": activity.testType,
+        "noQuestion": activity.noQuestion,
+        "correctAns": activity.correctAns
+    } for activity in user_activities]
+
+    df = pd.DataFrame(data)
+
+    test_types = df["testType"].unique()
+    selected_test_type = request.form.get("testType", 'All')
+
+    if selected_test_type == 'All':
+        filtered_df = df
+    else:
+        filtered_df = df[df['testType']==selected_test_type]
+
+    bar_chart = create_bar_chart(filtered_df)
+    pie_chart = create_pie_chart(filtered_df)
     
-    return render_template('account.html',image_file=image_file)
+    return render_template('account.html',
+                           image_file=image_file,
+                           test_types = test_types,
+                           bar_chart = bar_chart,
+                           pie_chart = pie_chart,
+                           selected_test_type = selected_test_type)
 
 # Logout route
 @app.route("/logout")
@@ -118,16 +146,29 @@ def about():
 @app.route("/practice", methods = ['GET', 'POST'])
 def practice():
     
-    global cl_q_no, cl_a_no, df
+    global cl_q_no, cl_a_no, df_cl
     global CL_questions_1, CL_questions_2, CL_Answers, CL_urAnswers
 
     # common letter variables 
-    df = same_letter_must_fit_into_both(7)
+    df_cl = same_letter_must_fit_into_both(7)
     cl_q_no = cl_a_no = 0
     CL_questions_1 = []
     CL_questions_2 = []
     CL_Answers = []
     CL_urAnswers = []
+
+    global df_fnpl, fnpl_q_no, fnpl_a_no
+    global FNPL_letters_1, FNPL_letters_2, FNPL_letters_3, FNPL_letters_4, FNPL_Answers, FNPL_urAnswers
+
+    # find next pair letters varibles
+    df_fnpl = find_next_pair_letters(7)
+    fnpl_q_no = fnpl_a_no = 0
+    FNPL_letters_1 = []
+    FNPL_letters_2 = []
+    FNPL_letters_3 = []
+    FNPL_letters_4 = []
+    FNPL_Answers = []
+    FNPL_urAnswers = []
 
     form = practiceform()
 
@@ -150,19 +191,12 @@ def practice():
 @app.route("/commonletter", methods=['GET', 'POST'])
 def commonletter():
 
-    global cl_q_no, cl_a_no, df
+    global cl_q_no, cl_a_no, df_cl
     global CL_questions_1, CL_questions_2, CL_Answers, CL_urAnswers  
 
-    print(f"Current question index: {cl_q_no}")
-
-    if cl_q_no >= len(df):
-        #cl_q_no = 0
-        print("All questions completed, redirecting to dashboard.")
-        print(CL_questions_1)
-        print(CL_Answers)
-        print(CL_urAnswers)
+    if cl_q_no >= len(df_cl):
         Activity=dailyActivity(username=current_user.username,
-                               testType='Arithmetic',
+                               testType='CommonLetter',
                                noQuestion=cl_q_no,
                                correctAns=cl_a_no)
                 
@@ -170,17 +204,13 @@ def commonletter():
         db.session.commit()
         return redirect(url_for('commonletterdashboard'))
 
-    question_data = df.iloc[cl_q_no]
+    question_data = df_cl.iloc[cl_q_no]
     answer = question_data['answer']
-    print(question_data['question_1'], question_data['question_2'])
-    print('Answer: ', question_data['answer'])
     form = commonletterquestionform()
     form.options.choices = [(option, option) for option in question_data['options']]
 
     if form.submit.data:
-        print('next is pressed')
         selected_option = form.options.data
-        print(f"User selected: {selected_option}, Correct answer: {question_data['answer']}")
         CL_questions_1.append(question_data['question_1'])
         CL_questions_2.append(question_data['question_2'])
         CL_Answers.append(question_data['answer']) 
@@ -189,7 +219,6 @@ def commonletter():
         if selected_option == answer:
             cl_a_no += 1
         cl_q_no += 1
-        print(f"Updated score: {cl_a_no}, Next question: {cl_q_no}")
         return redirect(url_for('commonletter'))
 
     return render_template(
@@ -224,5 +253,62 @@ def identifynextnumber():
 
 @app.route("/nextletterpair", methods = ['GET', 'POST'])
 def nextletterpair():
-    return render_template('nextletterpair.html')
+    global df_fnpl, fnpl_q_no, fnpl_a_no
+    global FNPL_letters_1, FNPL_letters_2, FNPL_letters_3, FNPL_letters_4, FNPL_Answers, FNPL_urAnswers
+
+    if fnpl_q_no >= len(df_fnpl):
+        Activity=dailyActivity(username=current_user.username,
+                               testType='findnextletterpair',
+                               noQuestion=fnpl_q_no,
+                               correctAns=fnpl_a_no)
+                
+        db.session.add(Activity)
+        db.session.commit()
+        return redirect(url_for('nextletterpairdashboard'))
+
+    question_data = df_fnpl.iloc[fnpl_q_no]
+    answer = question_data['answer']
+    form = findnextletterpairform()
+    form.options.choices = [(option, option) for option in question_data['options']]
+
+    if form.submit.data:
+        selected_option = form.options.data
+        FNPL_letters_1.append(question_data['letter1'])
+        FNPL_letters_2.append(question_data['letter2'])
+        FNPL_letters_3.append(question_data['letter3'])
+        FNPL_letters_4.append(question_data['letter4'])
+        FNPL_Answers.append(question_data['answer']) 
+        FNPL_urAnswers.append(selected_option)         
+
+        if selected_option == answer:
+            fnpl_a_no += 1
+        fnpl_q_no += 1
+        return redirect(url_for('nextletterpair'))
+
+    return render_template(
+        'nextletterpair.html',
+        letter1=question_data['letter1'],
+        letter2=question_data['letter2'],
+        letter3=question_data['letter3'],
+        letter4=question_data['letter4'],
+        form=form
+    )
+
+@app.route("/nextletterpairdashboard")
+def nextletterpairdashboard():
+    global df_fnpl, fnpl_q_no, fnpl_a_no
+    global FNPL_letters_1, FNPL_letters_2, FNPL_letters_3, FNPL_letters_4, FNPL_Answers, FNPL_urAnswers
+
+    
+    return render_template('nextletterpairdashboard.html', 
+                           FNPL_letters_1=FNPL_letters_1, 
+                           FNPL_letters_2=FNPL_letters_2, 
+                           FNPL_letters_3=FNPL_letters_3, 
+                           FNPL_letters_4=FNPL_letters_4, 
+                           FNPL_Answers=FNPL_Answers, 
+                           FNPL_urAnswers=FNPL_urAnswers,
+                           fnpl_q_no=fnpl_q_no, 
+                           fnpl_a_no=fnpl_a_no)
+
+
 
