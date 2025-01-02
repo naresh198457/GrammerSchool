@@ -1,10 +1,8 @@
 from app import app
 from flask import render_template, request, url_for, flash, redirect, session
 import os
-from flask_mail import Mail, Message
-from app.models import db
-from app.models import User, dailyActivity
-from app.forms import RegistrationForm, LoginForm, contactForm, practiceform, commonletterquestionform, findnextletterpairform
+
+from app.forms import practiceform, commonletterquestionform, findnextletterpairform
 from app.functions import same_letter_must_fit_into_both, find_next_pair_letters, create_bar_chart, create_pie_chart
 from flask_bcrypt import Bcrypt, generate_password_hash, check_password_hash
 from flask_login import login_user, current_user, logout_user, login_required
@@ -16,7 +14,7 @@ from datetime import datetime, timedelta
 @app.route('/')
 @app.route('/home',methods=['POST','GET']) # decorators: '/' route page of our website
 def home():
-    image_file=url_for('static',filename='profile_pics/'+current_user.image_file)
+    image_file=url_for('static',filename='profile_pics/default.jpg')
     return render_template('home.html',image_file=image_file)
 
 

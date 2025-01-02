@@ -3,7 +3,7 @@
 
 {% block content %}
 
-<p><h5>Weldone, {{current_user.firstname.capitalize()}} have answered {{cl_q_no}} questions and {{cl_a_no}} are correct.</h5></p>
+<p><h5>Weldone, Mishi have answered {{cl_q_no}} questions and {{cl_a_no}} are correct.</h5></p>
 
 <table class="table table-striped" border="1">
     <thead><tr><th>Test</th><th>No of questions</th><th>Correct Answers</th><th>Comment</th></tr></thead>
@@ -34,18 +34,18 @@
 </table>
 
 {% if cl_a_no/cl_q_no*100>90 or cl_a_no/cl_q_no*100==90:%}
-    <h3 style="color:darkgreen">Congratulations...  </h3> {{current_user.firstname.capitalize()}} scored {{cl_a_no/cl_q_no*100}}%.
+    <h3 style="color:darkgreen">Congratulations...  </h3> Mishi scored {{cl_a_no/cl_q_no*100}}%.
     {% elif cl_a_no/cl_q_no*100>80 or cl_a_no/cl_q_no*100==80%}
-    <h3 style="color:rgb(20, 137, 166)">Welldone...  </h3> {{current_user.firstname.capitalize()}} scored {{cl_a_no/cl_q_no*100}}%. Always there is room for improvement. 
+    <h3 style="color:rgb(20, 137, 166)">Welldone...  </h3> Mishi scored {{cl_a_no/cl_q_no*100}}%. Always there is room for improvement. 
     {% elif cl_a_no/cl_q_no*100>70 or cl_a_no/cl_q_no*100==70%}
-    <h3 style="color:rgb(224, 41, 231)">Above Average...  </h3> {{current_user.firstname.capitalize()}} scored {{cl_a_no/cl_q_no*100}}%. Always there is room for improvement. 
+    <h3 style="color:rgb(224, 41, 231)">Above Average...  </h3> Mishi scored {{cl_a_no/cl_q_no*100}}%. Always there is room for improvement. 
     {% elif cl_a_no/cl_q_no*100>60 or cl_a_no/cl_q_no*100==60%}
-    <h3 style="color:rgb(241, 174, 19)">Average...  </h3> {{current_user.firstname.capitalize()}} scored {{cl_a_no/cl_q_no*100}}%. Always there is room for improvement. 
+    <h3 style="color:rgb(241, 174, 19)">Average...  </h3> Mishi scored {{cl_a_no/cl_q_no*100}}%. Always there is room for improvement. 
     {% elif cl_a_no/cl_q_no*100>50 or cl_a_no/cl_q_no*100==50%}
-    <h3 style="color:rgb(89, 5, 51)"> Below Average...  </h3> {{current_user.firstname.capitalize()}} scored {{cl_a_no/cl_q_no*100}}%. Always there is room for improvement. 
+    <h3 style="color:rgb(89, 5, 51)"> Below Average...  </h3> Mishi scored {{cl_a_no/cl_q_no*100}}%. Always there is room for improvement. 
     
     {%else%}
-    <h3 style="color:rgb(89, 5, 51)">Need to work hard...  </h3> {{current_user.firstname.capitalize()}} scored {{cl_a_no/cl_q_no*100}}%. Always there is room for improvement. 
+    <h3 style="color:rgb(89, 5, 51)">Need to work hard...  </h3> Mishi scored {{cl_a_no/cl_q_no*100}}%. Always there is room for improvement. 
     {%endif%}
 
     <br>

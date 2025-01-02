@@ -17,21 +17,6 @@ app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
 app.config['MAIL_USE_SSL'] = os.getenv('MAIL_USE_SSL')#
 app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS')
 app.app_context().push()  # Ensure we are in the app context
-# app.config.from_pyfile('config.cfg')
 
-
-#Creating database
-db = SQLAlchemy(app)
-#db.init_app(app)
-bcrypt=Bcrypt(app)
-
-# login manager
-login_manager = LoginManager(app)
-login_manager.login_view='login'
-login_manager.login_message_category = 'info'
-
-with app.app_context():
-    from . import db, app
-    db.create_all()  # Create tables if they don't exist
 
 from app import route
