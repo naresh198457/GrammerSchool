@@ -62,7 +62,7 @@ def register():
                                          UserFirstName=form.firstname.data.capitalize(),
                                          Username=form.username.data,
                                          UserEmail=form.email.data))
-        mail.send(msg)
+        #mail.send(msg)
         
         flash(f'Account created for {form.username.data}!','success')
         return redirect(url_for('login'))
@@ -93,23 +93,26 @@ def account():
 
     df = pd.DataFrame(data)
 
-    test_types = df["testType"].unique()
-    selected_test_type = request.form.get("testType", 'All')
+    if df.empty:
+        return render_template('home.html')
+    else: 
+        test_types = df["testType"].unique()
+        selected_test_type = request.form.get("testType", 'All')
 
-    if selected_test_type == 'All':
-        filtered_df = df
-    else:
-        filtered_df = df[df['testType']==selected_test_type]
+        if selected_test_type == 'All':
+            filtered_df = df
+        else:
+            filtered_df = df[df['testType']==selected_test_type]
 
-    bar_chart = create_bar_chart(filtered_df)
-    pie_chart = create_pie_chart(filtered_df)
-    
-    return render_template('account.html',
-                           image_file=image_file,
-                           test_types = test_types,
-                           bar_chart = bar_chart,
-                           pie_chart = pie_chart,
-                           selected_test_type = selected_test_type)
+        bar_chart = create_bar_chart(filtered_df)
+        pie_chart = create_pie_chart(filtered_df)
+        
+        return render_template('account.html',
+                            image_file=image_file,
+                            test_types = test_types,
+                            bar_chart = bar_chart,
+                            pie_chart = pie_chart,
+                            selected_test_type = selected_test_type)
 
 # Logout route
 @app.route("/logout")
