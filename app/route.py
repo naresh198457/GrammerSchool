@@ -15,17 +15,7 @@ from datetime import datetime, timedelta
 @app.route('/home',methods=['POST','GET']) # decorators: '/' route page of our website
 def home():
     image_file=url_for('static',filename='profile_pics/default.jpg')
-    return render_template('home.html',image_file=image_file)
-
-
-# about route
-@app.route("/about",methods=['GET','POST'])
-def about():
-
-    Designer_im_file=url_for('static',filename='Desiner_Pics/Naresh_BW.jpg')
-    
-    return render_template('about.html',Designer_im_file=Designer_im_file)
-    
+    return render_template('home.html',image_file=image_file)    
 
 # Practice route
 @app.route("/practice", methods = ['GET', 'POST'])
@@ -182,6 +172,3 @@ def nextletterpairdashboard():
                            FNPL_urAnswers=FNPL_urAnswers,
                            fnpl_q_no=fnpl_q_no, 
                            fnpl_a_no=fnpl_a_no)
-
-
-

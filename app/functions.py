@@ -123,8 +123,8 @@ def same_letter_must_fit_into_both(noofquestions):
 
     df = pd.DataFrame(columns=['question', 'answer', 'options'])
 
-    df_start = pd.read_csv('G:\My Drive\Mishitha\GrammerSchool\datafiles\words_start.csv')
-    df_end = pd.read_csv('G:\My Drive\Mishitha\GrammerSchool\datafiles\words_end.csv')
+    df_start = pd.read_csv('datafiles/words_start.csv')
+    df_end = pd.read_csv(r'datafiles/words_end.csv')
 
     letter_list=df_end['letter'].unique().tolist()
 
