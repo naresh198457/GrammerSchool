@@ -1,0 +1,47 @@
+{%extends "layout.html"%}
+
+{% block content %}
+<div class="form-group">
+    <div class="content-section">
+
+        <form method="POST" action="">
+            {{form.hidden_tag()}}
+            <fieldset class="form-group">
+                <div class="row">
+                    <div class='col-6 text-left'>
+                        <legend><h3>Brain Teaser</h3></legend>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        {{form.BT_Question(class="form-control-plaintext")}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-2">
+                        {%if BT_NextON==0:%}
+                        {{form.BT_Ans_Rev_Button(class="btn btn-outline-info")}}
+                        {%endif%}
+                    </div>
+                    <div class="col-6">
+                        {%if BT_ON==1:%}
+                        {{form.BT_Answer(class="form-control-plaintext")}}
+                        {%endif%}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6"></div>
+                    <div class="col-2">
+                        {%if BT_NextON==1:%}
+                        {{form.BT_Next(class="btn btn-outline-info")}}
+                        {%endif%}
+                    </div>
+                </div>
+     
+            </fieldset>
+        </form>
+    </div>
+</div>
+{% endblock content %}

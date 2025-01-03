@@ -1,0 +1,80 @@
+{%extends "layout.html"%}
+
+{% block content %}
+<div class="form-group">
+    <div class="content-section">
+
+        <form method="POST" action="">
+            {{form.hidden_tag()}}
+            <fieldset class="form-group">
+                <div class="row">
+                    <div class='col-6 text-left'>
+                        <legend><h3>Arthematic test</h3></legend>
+                    </div>
+                    <div class="col-6 text-right">
+                        <legend><h4>{{question_no+1}}/20</h4></legend>
+                    </div>
+                </div>
+                
+                {{form.hidden_tag()}}
+                <br>
+                <br>
+    
+                <div class="row">
+                    <div class="col-1">
+                        <h2>{{' '}}</h2>
+                    </div>
+                    <div class="col-1">
+                        <h2>{{form.No_1_100s(class="form-control-plaintext border text-center")}}</h2>
+                    </div>
+                    <div class="col-1">
+                        <h2>{{form.No_1_10s(class="form-control-plaintext border text-center")}}</h2>
+                    </div>
+                    <div class="col-1">
+                        <h2>{{form.No_1_1s(class="form-control-plaintext border text-center")}}</h2>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-1 text-right"><h2>{{form.Symbol(class="form-control-plaintext")}}</h2></div>
+                    <div class="col-1 text-center">
+                        <h2>{{form.No_2_100s(class="form-control-plaintext border text-center")}}</h2>
+                    </div>
+                    <div class="col-1">
+                        <h2>{{form.No_2_10s(class="form-control-plaintext border text-center")}}</h2>
+                    </div>
+                    <div class="col-1">
+                        <h2>{{form.No_2_1s(class="form-control-plaintext border text-center")}}</h2>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-1">
+                        <h2>{{'='}}</h2>
+                    </div>
+                    <div class="col-1 border">
+                        <h2>{{form.No_3_100s(class="form-control-plaintext text-center")}}</h2>
+                    </div>
+                    <div class="col-1 border">
+                        <h2>{{form.No_3_10s(class="form-control-plaintext text-center")}}</h2>
+                    </div>
+                    <div class="col-1 border">
+                        <h2>{{form.No_3_1s(class="form-control-plaintext text-center", autofocus=true)}}</h2>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-2"></div>
+                    <div class="col-2"></div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            {{form.Next_Button(class="btn btn-outline-info")}}
+                        </div>
+                    </div>
+                </div>               
+     
+            </fieldset>
+        </form>
+    </div>
+</div>
+{% endblock content %}

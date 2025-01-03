@@ -174,47 +174,24 @@ def same_letter_must_fit_into_both(noofquestions):
     return df
 
 # ---------------------------------------------------------------------------------------
-def create_bar_chart(filtered_df):
-    # Filter last 30 days
-    start_date = datetime.now() - timedelta(days=30)
-    last_30_days = filtered_df[filtered_df["date_test"] >= start_date]
+def Number_seperation(No):
+    No=str(No)
+    if len(No)==3:
+        No1=No[2]
+        No2=No[1]
+        No3=No[0]
+    elif len(No)==2:
+        No1=No[1]
+        No2=No[0]
+        No3=' '
+    elif len(No)==1:
+        No1=No[0]
+        No2=' '
+        No3=' '
+    return No1, No2, No3
 
-    # Count test types per day
-    bar_data = last_30_days.groupby([last_30_days["date_test"].dt.date, "testType"]).size().unstack(fill_value=0)
-
-    # Plot bar chart
-    plt.figure(figsize=(10, 6))
-    bar_data.plot(kind="bar", stacked=True, ax=plt.gca())
-    plt.title("Test Types Used Per Day (Last 30 Days)")
-    plt.xlabel("Date")
-    plt.ylabel("Count")
-    plt.tight_layout()
-
-    # Save to buffer
-    buffer = BytesIO()
-    plt.savefig(buffer, format="png")
-    buffer.seek(0)
-    return base64.b64encode(buffer.getvalue()).decode("utf-8")
-
-
-def create_pie_chart(filtered_df):
-    # Calculate total correct answers
-    correct_answers = filtered_df["correctAns"].sum()
-    incorrect_answers = (filtered_df["noQuestion"] - filtered_df["correctAns"]).sum()
-
-    # Data for pie chart
-    pie_data = [correct_answers, incorrect_answers]
-    labels = ["Correct Answers", "Incorrect Answers"]
-    colors = ["#4CAF50", "#F44336"]
-
-    # Plot pie chart
-    plt.figure(figsize=(6, 6))
-    plt.pie(pie_data, labels=labels, autopct="%1.1f%%", colors=colors, startangle=90)
-    plt.title("Percentage of Correct Answers")
-    plt.tight_layout()
-
-    # Save to buffer
-    buffer = BytesIO()
-    plt.savefig(buffer, format="png")
-    buffer.seek(0)
-    return base64.b64encode(buffer.getvalue()).decode("utf-8")
+def generating_RandomNumbers(No,No1,No2):
+    Numbers=[]
+    for _ in range(No):
+        Numbers.append(random.randint(No1,No2))
+    return Numbers

@@ -1,0 +1,135 @@
+{%extends "layout.html"%}
+
+{% block content %}
+<p><h5>Weldone, Mishi have answered 20 questions and {{Add_corrected_ans+Sub_corrected_ans+Mul_corrected_ans}} are correct.</h5></p>
+
+<table class="table table-striped">
+    <thead><tr><th>Test</th><th>No of questions</th><th>Correct Answers</th><th>Comment</th></tr></thead>
+    <tbody>
+        <tr>
+            <td>Additions</td>
+            <td>7</td>
+            <td>{{Add_corrected_ans}}</td>
+            <td>
+                {% if Add_corrected_ans/7*100>90 or Add_corrected_ans/7*100==90:%}
+                <h5 style="color:darkgreen">Congratulations...  </h5>
+                {% elif Add_corrected_ans/7*100>80 or Add_corrected_ans/7*100==80%}
+                <h5 style="color:rgb(20, 137, 166)">Welldone...  </h5>
+                {% elif Add_corrected_ans/7*100>70 or Add_corrected_ans/7*100==70%}
+                <h5 style="color:rgb(224, 41, 231)">Above Average...  </h5> 
+                {% elif Add_corrected_ans/7*100>60 or Add_corrected_ans/7*100==60%}
+                <h5 style="color:rgb(241, 174, 19)">Average...  </h5> 
+                {% elif Add_corrected_ans/7*100>50 or Add_corrected_ans/7*100==50%}
+                <h5 style="color:rgb(89, 5, 51)"> Below Average...  </h5>  
+                {%else%}
+                <h5 style="color:rgb(89, 5, 51)">Need to work hard...  </h5>
+                {%endif%}
+            </td>
+        </tr>
+        <tr>
+            <td>Substraction</td>
+            <td>7</td>
+            <td>{{Sub_corrected_ans}}</td>
+            <td>
+                {% if Sub_corrected_ans/7*100>90 or Sub_corrected_ans/7*100==90:%}
+                <h5 style="color:darkgreen">Congratulations...  </h5>
+                {% elif Sub_corrected_ans/7*100>80 or Sub_corrected_ans/7*100==80%}
+                <h5 style="color:rgb(20, 137, 166)">Welldone...  </h5>
+                {% elif Sub_corrected_ans/7*100>70 or Sub_corrected_ans/7*100==70%}
+                <h5 style="color:rgb(224, 41, 231)">Above Average...  </h5> 
+                {% elif Sub_corrected_ans/7*100>60 or Sub_corrected_ans/7*100==60%}
+                <h5 style="color:rgb(241, 174, 19)">Average...  </h5> 
+                {% elif Sub_corrected_ans/7*100>50 or Sub_corrected_ans/7*100==50%}
+                <h5 style="color:rgb(89, 5, 51)"> Below Average...  </h5>  
+                {%else%}
+                <h5 style="color:rgb(89, 5, 51)">Need to work hard...  </h5>
+                {%endif%}
+            </td>
+        </tr>
+        <tr>
+            <td>Multiplication</td>
+            <td>6</td>
+            <td>{{Mul_corrected_ans}}</td>
+
+            <td>
+                {% if Mul_corrected_ans/6*100>90 or Mul_corrected_ans/6*100==90:%}
+                <h5 style="color:darkgreen">Congratulations...  </h5>
+                {% elif Mul_corrected_ans/6*100>80 or Mul_corrected_ans/6*100==80%}
+                <h5 style="color:rgb(20, 137, 166)">Welldone...  </h5>
+                {% elif Mul_corrected_ans/6*100>70 or Mul_corrected_ans/6*100==70%}
+                <h5 style="color:rgb(224, 41, 231)">Above Average...  </h5> 
+                {% elif Mul_corrected_ans/6*100>60 or Mul_corrected_ans/6*100==60%}
+                <h5 style="color:rgb(241, 174, 19)">Average...  </h5> 
+                {% elif Mul_corrected_ans/6*100>50 or Mul_corrected_ans/6*100==50%}
+                <h5 style="color:rgb(89, 5, 51)"> Below Average...  </h5>  
+                {%else%}
+                <h5 style="color:rgb(89, 5, 51)">Need to work hard...  </h5>
+                {%endif%}
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+{% if (Add_corrected_ans+Sub_corrected_ans+Mul_corrected_ans)/20*100>90 or (Add_corrected_ans+Sub_corrected_ans+Mul_corrected_ans)/20*100==90:%}
+    <h3 style="color:darkgreen">Congratulations...  </h3> Mishi scored {{(Add_corrected_ans+Sub_corrected_ans+Mul_corrected_ans)/20*100}}%.
+    {% elif (Add_corrected_ans+Sub_corrected_ans+Mul_corrected_ans)/20*100>80 or (Add_corrected_ans+Sub_corrected_ans+Mul_corrected_ans)/20*100==80%}
+    <h3 style="color:rgb(20, 137, 166)">Welldone...  </h3> Mishi scored {{(Add_corrected_ans+Sub_corrected_ans+Mul_corrected_ans)/20*100}}%. Always there is room for improvement. 
+    {% elif (Add_corrected_ans+Sub_corrected_ans+Mul_corrected_ans)/20*100>70 or Add_corrected_ans+Sub_corrected_ans+Mul_corrected_ans/20*100==70%}
+    <h3 style="color:rgb(224, 41, 231)">Above Average...  </h3> Mishi scored {{(Add_corrected_ans+Sub_corrected_ans+Mul_corrected_ans)/20*100}}%. Always there is room for improvement. 
+    {% elif (Add_corrected_ans+Sub_corrected_ans+Mul_corrected_ans)/20*100>60 or (Add_corrected_ans+Sub_corrected_ans+Mul_corrected_ans)/20*100==60%}
+    <h3 style="color:rgb(241, 174, 19)">Average...  </h3> Mishi scored {{(Add_corrected_ans+Sub_corrected_ans+Mul_corrected_ans)/20*100}}%. Always there is room for improvement. 
+    {% elif (Add_corrected_ans+Sub_corrected_ans+Mul_corrected_ans)/20*100>50 or (Add_corrected_ans+Sub_corrected_ans+Mul_corrected_ans)/20*100==50%}
+    <h3 style="color:rgb(89, 5, 51)"> Below Average...  </h3> Mishi scored {{(Add_corrected_ans+Sub_corrected_ans+Mul_corrected_ans)/20*100}}%. Always there is room for improvement. 
+    
+    {%else%}
+    <h3 style="color:rgb(89, 5, 51)">Need to work hard...  </h3> Mishi scored {{(Add_corrected_ans+Sub_corrected_ans+Mul_corrected_ans)/20*100}}%. Always there is room for improvement. 
+    {%endif%}
+
+
+    <table class="table table-striped">
+        <thead><tr><th>No</th><th>Question</th><th>Answer</th><th>Your response</th><th>Comment</th></tr></thead>
+        <tbody>
+            {%for i in range((20))%}
+            <tr>
+                <td>{{i+1}}</td>
+                <td>{{number1[i]}}{{Symbol[i]}}{{number2[i]}}</td>
+                
+                    {%if (i<7):%}
+                    <td>{{number1[i]+number2[i]}}</td>
+                    <td>{{Arith_Ans[i]}}</td>
+                    <td>
+                        {% if (Arith_Ans[i])==(number1[i]+number2[i]): %}
+                        <td><span style="color:darkgreen">Correct</span></td>
+                        {% else %}
+                        <td><span style="color:red">Wrong</span></td>
+                        {% endif %}
+                    </td>
+                    {%elif (i<14):%}
+                    <td>{{number1[i]-number2[i]}}</td>
+                    <td>{{Arith_Ans[i]}}</td>
+                    <td>
+                        {% if (Arith_Ans[i])==(number1[i]-number2[i]): %}
+                        <td><span style="color:darkgreen">Correct</span></td>
+                        {% else %}
+                        <td><span style="color:red">Wrong</span></td>
+                        {% endif %}
+                    </td>
+                    {%else:%}
+                    <td>{{number1[i]*number2[i]}}</td>
+                    <td>{{Arith_Ans[i]}}</td>
+                    <td>
+                        {% if (Arith_Ans[i])==(number1[i]*number2[i]): %}
+                        <td><span style="color:darkgreen">Correct</span></td>
+                        {% else %}
+                        <td><span style="color:red">Wrong</span></td>
+                        {% endif %}
+                    </td>
+                    {%endif%}
+            </tr>
+            {%endfor%}
+
+        </tbody>
+    </table>
+
+    
+{% endblock content %}
