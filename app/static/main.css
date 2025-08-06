@@ -83,3 +83,42 @@ a.article-title:hover {
   white-space: pre-wrap;}
 
 
+/* Timer Styles */
+.timer-display {
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 3px;
+    font-family: monospace;
+    display: flex;
+    align-items: center;
+}
+
+.timer-display.warning {
+    background-color: #ffc107;
+    color: #856404;
+}
+
+.timer-display.danger {
+    background-color: #dc3545;
+    color: white;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* Adjust navbar items for timer */
+.navbar-nav {
+    align-items: center;
+}
+
+/* Ensure content doesn't hide behind fixed navbar */
+body {
+    padding-top: 56px; /* Height of navbar */
+}
+
+  
+

@@ -1,12 +1,184 @@
 {% extends "layout.html" %}
 
-
 {% block content %}
-identify next number under construction
+<div class="quiz-container">
+    
+    <form method="post" class="quiz-form">
+        <div class="question-header">
+            <h3 class="question-number">{{in_q_no+1}}/{{in_q}}</h3><br>
+            <h4 class="question-text">{{ question | safe}}</h4>
+        </div>
+        
+        {{ form.hidden_tag() }}
+        
+        <div class="options-container">
+            {% for option in form.options %}
+                <div class="form-check option-item">
+                    {{ option(class="form-check-input") }}
+                    <label class="form-check-label" for="{{ option.id }}">
+                        {{ option.label.text }}
+                    </label>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <div class="form-submit">
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
+    </form>
+</div>
 
+<script>
+    // Timer configuration
+    const quizDuration = 120; // 2 minutes in seconds
+    let timeLeft = quizDuration;
+    const timerElement = document.createElement('div');
+    timerElement.id = 'quiz-timer';
+    timerElement.innerHTML = `
+        <i class="fas fa-clock"></i>
+        <span class="time-text">Time: </span>
+        <span class="time-value">2:00</span>
+    `;
+    document.body.appendChild(timerElement);
+    
+    function updateTimer() {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        
+        timerElement.querySelector('.time-value').textContent = 
+            `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        
+        // Visual feedback when time is running low
+        timerElement.classList.remove('warning', 'danger');
+        
+        if (timeLeft <= 30) {  // 0.5 minute left
+            timerElement.classList.add('danger');
+        } else if (timeLeft <= 60) {  // 1 minutes left
+            timerElement.classList.add('warning');
+        }
+        
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            // More user-friendly time-up notification
+            const timeUpModal = `
+                <div class="modal fade" id="timeUpModal" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Time's Up!</h5>
+                            </div>
+                            <div class="modal-body">
+                                <p>Your quiz is being submitted automatically.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', timeUpModal);
+            $('#timeUpModal').modal('show');
+            setTimeout(() => document.forms[0].submit(), 2000);
+        } else {
+            timeLeft--;
+        }
+    }
+    
+    // Initialize and update timer
+    const timerInterval = setInterval(updateTimer, 1000);
+    updateTimer();
+    
+    // Clean up timer when leaving page
+    window.addEventListener('beforeunload', function() {
+        clearInterval(timerInterval);
+    });
+</script>
+
+<style>
+    /* Quiz-specific styles */
+    .quiz-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    .quiz-title {
+        color: #444444;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+    
+    .question-header {
+        margin-bottom: 25px;
+    }
+    
+    .question-number {
+        color: #5f788a;
+    }
+    
+    .question-text {
+        color: #333333;
+        line-height: 1.5;
+    }
+    
+    .options-container {
+        margin-bottom: 30px;
+    }
+    
+    .option-item {
+        padding: 10px 15px;
+        margin-bottom: 10px;
+        background: #f8f9fa;
+        border-radius: 4px;
+        transition: background 0.2s;
+    }
+    
+    .option-item:hover {
+        background: #e9ecef;
+    }
+    
+    .form-check-label {
+        margin-left: 10px;
+        cursor: pointer;
+    }
+    
+    .form-submit {
+        text-align: center;
+    }
+    
+    /* Timer styles */
+    #quiz-timer {
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        font-size: 1.2em;
+        background: #ffffff;
+        padding: 8px 15px;
+        border: 1px solid #dddddd;
+        border-radius: 4px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        z-index: 1000;
+    }
+    
+    #quiz-timer i {
+        margin-right: 5px;
+    }
+    
+    #quiz-timer.warning {
+        background: #fff3cd;
+        border-color: #ffeeba;
+        color: #856404;
+    }
+    
+    #quiz-timer.danger {
+        background: #f8d7da;
+        border-color: #f5c6cb;
+        color: #721c24;
+        animation: pulse 1s infinite;
+    }
+    
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+</style>
 {% endblock content %}
-
-
-
-
-

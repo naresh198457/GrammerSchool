@@ -195,3 +195,97 @@ def generating_RandomNumbers(No,No1,No2):
     for _ in range(No):
         Numbers.append(random.randint(No1,No2))
     return Numbers
+
+
+# -------------------------------------------------------------------
+def generate_table_sequence():
+    # Choose a random multiplication table (1-12)
+    table = random.randint(1, 12)
+    
+    # Choose a random starting point (1-12)
+    start = random.randint(1, 12)
+    
+    # Generate sequence by going through the table
+    sequence = [table * (start + i) for i in range(7)]
+    
+    # Ensure all numbers are below 150
+    while any(num >= 150 for num in sequence):
+        # If any number is too large, pick a smaller table or start earlier
+        table = random.randint(1, 8)
+        start = random.randint(1, 5)
+        sequence = [table * (start + i) for i in range(7)]
+    
+    return sequence
+
+
+def generate_options(answer, range_limit=8, total_options=5):
+    options = set()
+    options.add(answer)
+    
+    while len(options) < total_options:
+        option = answer + random.randint(-range_limit, range_limit)
+        if option != answer:
+            options.add(option)
+    
+    options = list(options)
+    random.shuffle(options)
+    return options
+
+
+def generate_sequence():
+    # Choose a random pattern type
+    pattern_type = random.choice(['increment', 'decrement', 'multiply', 'alternate'])
+    
+    # Generate sequence based on pattern type
+    if pattern_type == 'increment':
+        start = random.randint(1, 50)
+        step = random.randint(2, 10)
+        sequence = [start + i*step for i in range(7)]
+    elif pattern_type == 'decrement':
+        start = random.randint(100, 140)
+        step = random.randint(2, 10)
+        sequence = [start - i*step for i in range(7)]
+    elif pattern_type == 'multiply':
+        sequence = generate_table_sequence()
+    else:  # alternate pattern
+        start = random.randint(10, 30)
+        sequence = [start + (5 if i%2==0 else -2) for i in range(7)]
+        for i in range(1, 7):
+            sequence[i] += sequence[i-1] - start
+    
+    # Ensure all numbers are below 150
+    sequence = [num for num in sequence if num < 150]
+    
+    # If sequence is too short due to filtering, generate a simple increment one
+    if len(sequence) < 7:
+        start = random.randint(1, 20)
+        step = random.randint(3, 7)
+        sequence = [start + i*step for i in range(7)]
+
+    new_sequence = sequence[:7]
+    removing_pos_number = random.randint(0, 4)
+    answer = new_sequence[removing_pos_number]
+    sequence_str = [str(new_sequence[i]) if i!= removing_pos_number else '__' for i in range(len(new_sequence))]
+    sequence_str_str = " &emsp; &emsp; ".join(sequence_str)
+
+    question_option = generate_options(answer, range_limit=8, total_options=5)
+    
+    return sequence_str_str, answer, question_option
+
+def create_list_numberquestion(no_quetions):
+
+    df=pd.DataFrame(columns=['sequence', 'answer', 'options'])
+    df['options'] = None
+    df = df.astype({'options': 'object'})
+    for i in range(no_quetions):
+
+        sequ_str, answer, question_options = generate_sequence()
+        df.at[i, 'sequence'] = sequ_str
+        df.at[i, 'answer'] = answer
+        df.at[i, 'options'] = set(question_options)
+
+    return df
+        
+
+
+# -------------------------------------------------------------------

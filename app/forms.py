@@ -23,6 +23,10 @@ class findnextletterpairform(FlaskForm):
     options = RadioField('Options', choices=[], validators=[DataRequired()])
     submit = SubmitField('Next')
 
+class identifynextnumberform(FlaskForm):
+    options = RadioField('Options', choices=[], validators=[DataRequired()])
+    submit = SubmitField('Next')
+
 class Arithmeticsform(FlaskForm):
     No_1_1s=StringField('Number 1 1 place',render_kw={'redaonly':True})
     No_1_10s=StringField('Number 1 10 place',render_kw={'redaonly':True})

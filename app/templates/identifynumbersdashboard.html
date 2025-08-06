@@ -1,0 +1,98 @@
+{% extends "layout.html" %}
+
+
+{% block content %}
+
+<p><h5>Weldone, Mishi have answered {{in_q_no}} questions and {{in_a_no}} are correct.</h5></p>
+
+<p><h5>Here is the summary of your performance:</h5></p>
+<table class="table table-striped" border="1">
+    <thead><tr><th>Test</th><th>No of questions</th><th>Correct Answers</th><th>Comment</th></tr></thead>
+    <tbody>
+        <tr>
+            <td>Common Letters</td>
+            <td>{{in_q_no}}</td>
+            <td>{{in_a_no}}</td>
+            <td>
+
+                {% if in_a_no/in_q_no*100>90 or in_a_no/in_q_no*100==90:%}
+                <h5 style="color:darkgreen">Congratulations...  </h5>
+                {% elif in_a_no/in_q_no*100>80 or in_a_no/in_q_no*100==80%}
+                <h5 style="color:rgb(20, 137, 166)">Welldone...  </h5>
+                {% elif in_a_no/in_q_no*100>70 or in_a_no/in_q_no*100==70%}
+                <h5 style="color:rgb(224, 41, 231)">Above Average...  </h5> 
+                {% elif in_a_no/in_q_no*100>60 or in_a_no/in_q_no*100==60%}
+                <h5 style="color:rgb(241, 174, 19)">Average...  </h5> 
+                {% elif in_a_no/in_q_no*100>50 or in_a_no/in_q_no*100==50%}
+                <h5 style="color:rgb(89, 5, 51)"> Below Average...  </h5>  
+                {%else%}
+                <h5 style="color:rgb(89, 5, 51)">Need to work hard...  </h5>
+                {%endif%}
+            </td>
+        </tr>
+        
+        
+    </tbody>
+</table>
+
+{% if in_a_no/in_q_no*100>90 or in_a_no/in_q_no*100==90:%}
+    <h3 style="color:darkgreen">Congratulations...  </h3> Mishi scored {{in_a_no/in_q_no*100}}%.
+    {% elif in_a_no/in_q_no*100>80 or in_a_no/in_q_no*100==80%}
+    <h3 style="color:rgb(20, 137, 166)">Welldone...  </h3> Mishi scored {{in_a_no/in_q_no*100}}%. Always there is room for improvement. 
+    {% elif in_a_no/in_q_no*100>70 or in_a_no/in_q_no*100==70%}
+    <h3 style="color:rgb(224, 41, 231)">Above Average...  </h3> Mishi scored {{in_a_no/in_q_no*100}}%. Always there is room for improvement. 
+    {% elif in_a_no/in_q_no*100>60 or in_a_no/in_q_no*100==60%}
+    <h3 style="color:rgb(241, 174, 19)">Average...  </h3> Mishi scored {{in_a_no/in_q_no*100}}%. Always there is room for improvement. 
+    {% elif in_a_no/in_q_no*100>50 or in_a_no/in_q_no*100==50%}
+    <h3 style="color:rgb(89, 5, 51)"> Below Average...  </h3> Mishi scored {{in_a_no/in_q_no*100}}%. Always there is room for improvement. 
+    
+    {%else%}
+    <h3 style="color:rgb(89, 5, 51)">Need to work hard...  </h3> Mishi scored {{in_a_no/in_q_no*100}}%. Always there is room for improvement. 
+    {%endif%}
+
+    <br>
+    <br>
+    <br>
+    <table class="table table-striped" border="1">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Question</th>
+                <th>Answer</th>
+                <th>Your response</th>
+                <th>Comment</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%for i in range(in_q_no)%}
+            <tr>
+                <td>{{i+1}}</td>
+                <td>{{IN_questions[i]}}</td>
+                <td>{{IN_Answers[i]}}</td>
+                <td>
+                    {% if IN_Answers[i]==IN_urAnswers[i]: %}
+                    <span style="color:black">{{IN_urAnswers[i]}}</span>
+                    {% else %}
+                    <span style="color:red">{{IN_urAnswers[i]}}</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if IN_Answers[i]==IN_urAnswers[i]: %}
+                    <span style="color:darkgreen">Correct</span>
+                    {% else %}
+                    <span style="color:red">Wrong</span>
+                    {% endif %}
+                </td>
+                    
+            </tr>
+            {%endfor%}
+
+        </tbody>
+    </table>
+
+{% endblock content %}
+
+
+
+
+

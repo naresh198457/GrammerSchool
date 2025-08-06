@@ -1,7 +1,8 @@
 from app import app
 from flask import render_template, request, url_for, flash, redirect, session
-from app.forms import practiceform, commonletterquestionform, findnextletterpairform, Arithmeticsform, BTForm
+from app.forms import practiceform, commonletterquestionform, findnextletterpairform, Arithmeticsform, BTForm, identifynextnumberform
 from app.functions import same_letter_must_fit_into_both, find_next_pair_letters, Number_seperation, generating_RandomNumbers
+from app.functions import generate_sequence, create_list_numberquestion
 import random
 import pandas as pd
 
@@ -33,7 +34,7 @@ def practice():
     global FNPL_letters_1, FNPL_letters_2, FNPL_letters_3, FNPL_letters_4, FNPL_Answers, FNPL_urAnswers
 
     # find next pair letters varibles
-    df_fnpl = find_next_pair_letters(10)
+    df_fnpl = find_next_pair_letters(7)
     fnpl_q_no = fnpl_a_no = 0
     FNPL_letters_1 = []
     FNPL_letters_2 = []
@@ -65,6 +66,15 @@ def practice():
     number1=[]
     number2=[]    
 
+    # identify the numbers sequence
+    global in_q_no, in_a_no, df_in
+    global IN_questions, IN_Answers, IN_urAnswers  
+    df_in = create_list_numberquestion(10)
+    in_q_no = 0
+    in_a_no = 0   
+    IN_questions = []
+    IN_Answers = []
+    IN_urAnswers =[]
 
     form = practiceform()
 
@@ -98,7 +108,9 @@ def commonletter():
         return redirect(url_for('commonletterdashboard'))
 
     question_data = df_cl.iloc[cl_q_no]
+    print(question_data)
     answer = question_data['answer']
+    print(answer)
     form = commonletterquestionform()
     form.options.choices = [(option, option) for option in question_data['options']]
 
@@ -118,7 +130,9 @@ def commonletter():
         'commonletter.html',
         question1=question_data['question_1'],
         question2=question_data['question_2'],
-        form=form
+        form=form,
+        cl_q_no=cl_q_no, 
+        cl_q = len(df_cl)
     )
 
 
@@ -142,7 +156,68 @@ def commonletterdashboard():
 
 @app.route("/identifynextnumber", methods = ['GET', 'POST'])
 def identifynextnumber():
-    return render_template('identifynextnumber.html')
+
+    global in_q_no, in_a_no, df_in
+    global IN_questions, IN_Answers, IN_urAnswers  
+
+    if in_q_no >= len(df_in):
+        
+        return redirect(url_for('identifynumbersdashboard'))
+    
+    question = df_in.iloc[in_q_no]
+    answer = question['answer']
+    question_option = question['options']
+    # print(f"Question: {question}, Answer: {answer}, Options: {question_option}")
+    
+    form = identifynextnumberform()
+    form.options.choices = [(option, option) for option in question_option]
+
+    if form.submit.data:
+        selected_option = form.options.data
+        # print(f"Selected Option: {selected_option}")
+
+        print("Answer field from df:", answer, type(answer))
+        
+        # print(f"Question: {question['sequence']}")
+        # print(f"selected option: {selected_option}")
+        IN_questions.append(question['sequence'].replace('&emsp; &emsp;', ' '))
+        IN_Answers.append(int(answer)) 
+        IN_urAnswers.append(int(selected_option))   
+        print(IN_Answers) 
+        print(IN_urAnswers)
+
+
+        if int(selected_option) == int(answer):
+            print("Correct answer!")
+            in_a_no += 1
+        print(f"Current Question Number: {in_q_no}, Correct Answers: {in_a_no}")
+        in_q_no += 1
+        return redirect(url_for('identifynextnumber'))
+
+    return render_template('identifynextnumber.html', 
+                           form= form,
+                           answer=answer, 
+                           question=question['sequence'], 
+                           question_option=question_option,
+                           in_q_no=in_q_no,
+                           in_a_no=in_a_no,
+                           in_q = len(df_in))
+
+@app.route("/identifynumbersdashboard")
+def identifynumbersdashboard():
+    global in_q_no, in_a_no, df_in
+    global IN_questions, IN_Answers, IN_urAnswers  
+
+    IN_Answers = [int(ans) for ans in IN_Answers]
+    IN_urAnswers = [int(ans) for ans in IN_urAnswers]
+    IN_questions = [str(q) for q in IN_questions]
+
+    return render_template('identifynumbersdashboard.html', 
+                           IN_questions=IN_questions,
+                           IN_Answers=IN_Answers,
+                           IN_urAnswers=IN_urAnswers,
+                           in_a_no=in_a_no,
+                           in_q_no=in_q_no)
 
 @app.route("/nextletterpair", methods = ['GET', 'POST'])
 def nextletterpair():
@@ -178,7 +253,9 @@ def nextletterpair():
         letter2=question_data['letter2'],
         letter3=question_data['letter3'],
         letter4=question_data['letter4'],
-        form=form
+        form=form, 
+        fnpl_q_no=fnpl_q_no,
+        fnpl_q = len(df_fnpl)
     )
 
 @app.route("/nextletterpairdashboard")
